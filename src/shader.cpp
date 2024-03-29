@@ -92,6 +92,12 @@ void Shader::setFloat(const std::string &name, float value) const
     glUniform1f(glGetUniformLocation(this->ID, name.c_str()), value); 
 }
 
+const unsigned int Shader::getId() const
+{
+	return this->ID;
+}
+
+
 Shader::~Shader()
 {
 

@@ -8,7 +8,7 @@ CFLAGS = -I. -Iglad -std=c++11 -Wall
 LIBS = -lglfw -lGL -lGLU -lX11 -lpthread -lXrandr -lXi -ldl
 
 # Source files
-SRC = src/main.cpp glad/glad.c
+SRC = src/main.cpp src/shader.cpp glad/glad.c 
 
 # Output
 TARGET = huy

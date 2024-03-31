@@ -28,6 +28,35 @@ void initGlfw()
     #endif
 }
 
+void initAndCompileTexture(GLuint &texture, std::string pathTexture)
+{
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);  
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    glActiveTexture(GL_TEXTURE0); 
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    int width, height, nrChannels;
+    unsigned char *data = stbi_load(pathTexture.c_str(), &width, &height, &nrChannels, 0); 
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+
+    stbi_image_free(data);
+}
+
 int main()
 {
     initGlfw();
@@ -49,7 +78,7 @@ int main()
     }
 
 
-    Shader ourShader("/mnt/nfs/homes/kyelena/Desktop/SCOP/shaders/shader.vs", "/mnt/nfs/homes/kyelena/Desktop/SCOP/shaders/shader.fs");
+    Shader ourShader("shaders/shader.vs", "shaders/shader.fs");
     
     float vertices[] = {
         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
@@ -59,8 +88,8 @@ int main()
     };
 
     unsigned int indices[] = {  
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
+        0, 1, 3,
+        1, 2, 3 
     };
 
     unsigned int VBO, VAO, EBO;
@@ -99,7 +128,7 @@ int main()
     glBindTexture(GL_TEXTURE_2D, texture);
 
     int width, height, nrChannels;
-    unsigned char *data = stbi_load("/mnt/nfs/homes/kyelena/Desktop/SCOP/src/container.jpg", &width, &height, &nrChannels, 0); 
+    unsigned char *data = stbi_load("src/container.jpg", &width, &height, &nrChannels, 0); 
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -127,7 +156,7 @@ int main()
 
     int width1, height1, nrChannels1;
     stbi_set_flip_vertically_on_load(true);  
-    unsigned char *data1 = stbi_load("/mnt/nfs/homes/kyelena/Desktop/SCOP/src/awesomeface.png", &width1, &height1, &nrChannels1, 0); 
+    unsigned char *data1 = stbi_load("src/awesomeface.png", &width1, &height1, &nrChannels1, 0); 
     if (data1)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width1, height1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data1);
